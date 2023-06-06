@@ -12,12 +12,12 @@ const firebaseConfig = {
     projectId: FIRE_PROJECT_ID,
 };
 
-if (!firebase.apps.length) {
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-} else {
-    firebase.app();
-}
+// if (!firebase.apps.length) {
+//     // Initialize Firebase
+//     firebase.initializeApp(firebaseConfig);
+// } else {
+//     firebase.app();
+// }
 
 const db = firebase.firestore();
 

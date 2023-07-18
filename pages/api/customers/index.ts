@@ -1,5 +1,13 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import { pino } from 'pino';
 import { bigcommerceClient, getSession } from '../../../lib/auth';
+
+const logger = pino({
+    transport: {
+        target: 'pino-pretty',
+        options: { destination: 1 }
+    }
+})
 
 export default async function customers(req: NextApiRequest, res: NextApiResponse) {
     const {

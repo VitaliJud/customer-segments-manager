@@ -44,42 +44,53 @@ const Customers = () => {
     } as CustomerItem))
 
     const handleSearch = async () => {
-        setLoading(true)
-        try {
-            const query = `name:like=${name}&context=${encodedContext}`
-            const url = `/api/customers?${query}`
-            const res =  await fetch(url)
-            const { data } = await res.json()
-            setCustomers(data)
-            if(data.length === 0) {
-                const alert = {
-                    type: 'warning',
-                    header: 'No results',
-                    messages: [
-                        {
-                            text: `No results for ${name}`
-                        }
-                    ],
-                    autoDismiss: true
-                } as AlertProps
-                alertsManager.add(alert)
-            }
-        } catch(error) {
-            console.error(error)
+    setLoading(true)
+    try {
+        let query = ""
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+        if (!isNaN(name)) {
+            // If the entered value is a number (integer), use the id:in query
+            query = `id:in=${name}&context=${encodedContext}`
+        } else if (emailRegex.test(name)) {
+            // If the entered value matches the email format, use the email:in query
+            query = `email:in=${name}&context=${encodedContext}`
+        } else {
+            // If the entered value is a string, use the name:like query
+            query = `name:like=${name}&context=${encodedContext}`
+        }
+        const url = `/api/customers?${query}`
+        const res = await fetch(url)
+        const { data } = await res.json()
+        setCustomers(data)
+        if(data.length === 0) {
             const alert = {
-                type: 'error',
-                header: 'Error searching customers',
+                type: 'warning',
+                header: 'No results',
                 messages: [
                     {
-                        text: error.message
+                        text: `No results for ${name}`
                     }
                 ],
                 autoDismiss: true
             } as AlertProps
             alertsManager.add(alert)
         }
-        setLoading(false)
+    } catch(error) {
+        console.error(error)
+        const alert = {
+            type: 'error',
+            header: 'Error searching customers',
+            messages: [
+                {
+                    text: error.message
+                }
+            ],
+            autoDismiss: true
+        } as AlertProps
+        alertsManager.add(alert)
     }
+    setLoading(false)
+}
 
     const renderName = ({id, first_name, last_name }) => {
         return <Link href={`/customers/${id}`}>
@@ -108,8 +119,8 @@ const Customers = () => {
         <Form>
             <FormGroup>
                 <Input 
-                    label="Search by name"
-                    placeholder="John Doe"
+                    label="Search by name, email or ID"
+                    placeholder="John Doe | johndoe@hello.com | 123"
                     type="text"
                     value={name}
                     onChange={e => setName(e.target.value)}

@@ -36,7 +36,7 @@ const SegmentEditor = ({
             />
         </FormGroup>
         <Button
-            iconLeft={<AddIcon />}
+            iconLeft={<CheckIcon />}
             isLoading={loading}
             onClick={async (e) => {
                 e.preventDefault()

@@ -46,23 +46,26 @@ const Customers = () => {
     const handleSearch = async () => {
     setLoading(true)
     try {
-        let query = ""
-        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-        if (!isNaN(name)) {
-            // If the entered value is a number (integer), use the id:in query
-            query = `id:in=${name}&context=${encodedContext}`
-        } else if (emailRegex.test(name)) {
-            // If the entered value matches the email format, use the email:in query
-            query = `email:in=${name}&context=${encodedContext}`
-        } else {
-            // If the entered value is a string, use the name:like query
-            query = `name:like=${name}&context=${encodedContext}`
-        }
-        const url = `/api/customers?${query}`
-        const res = await fetch(url)
-        const { data } = await res.json()
-        setCustomers(data)
-        if(data.length === 0) {
+      let query = ""
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+      
+      if (emailRegex.test(name)) {
+        // If the entered value matches the email format, use the email:in query
+        query = `email:in=${name}&context=${encodedContext}`
+      } else if (!isNaN(Number(name))) {
+        // If the entered value is a number (integer), use the id:in query
+        query = `id:in=${name}&context=${encodedContext}`
+      } else {
+        // If the entered value is a string, use the name:like query
+        query = `name:like=${name}&context=${encodedContext}`
+      }
+  
+      const url = `/api/customers?${query}`
+      const res = await fetch(url)
+      const { data } = await res.json()
+      setCustomers(data)
+  
+      if (data.length === 0) {
             const alert = {
                 type: 'warning',
                 header: 'No results',

@@ -1,5 +1,5 @@
 import { Button, Form, FormGroup, Input, Textarea } from "@bigcommerce/big-design"
-import { AddIcon } from '@bigcommerce/big-design-icons'
+import { CheckIcon } from '@bigcommerce/big-design-icons'
 import { useState } from "react"
 
 const SegmentEditor = ({

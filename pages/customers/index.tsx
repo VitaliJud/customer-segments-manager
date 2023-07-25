@@ -51,7 +51,7 @@ const Customers = () => {
       
       if (emailRegex.test(name)) {
         // If the entered value matches the email format, use the email:in query
-        query = `email:in=${name}&context=${encodedContext}`
+        query = `email:in=${encodeURIComponent(name)}&context=${encodedContext}`
       } else if (!isNaN(Number(name))) {
         // If the entered value is a number (integer), use the id:in query
         query = `id:in=${name}&context=${encodedContext}`
